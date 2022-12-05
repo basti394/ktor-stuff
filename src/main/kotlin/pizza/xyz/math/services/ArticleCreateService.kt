@@ -2,20 +2,20 @@ package pizza.xyz.math.services
 
 import io.ktor.http.*
 import io.ktor.server.util.*
+import pizza.xyz.math.dao.dao
 import pizza.xyz.math.models.Article
-import pizza.xyz.math.models.articles
 
 class ArticleCreateService {
 
     private lateinit var title: String
     private lateinit var body: String
 
-    private lateinit var newEntry: Article
+    private var article: Article? = null
 
-    fun create(params: Parameters) {
+
+    suspend fun create(params: Parameters) {
         setProps(params)
-        newEntry = Article.newEntry(title, body)
-        articles.add(newEntry)
+        article = dao.addNewArticle(title, body)
         return
     }
 
@@ -24,5 +24,5 @@ class ArticleCreateService {
         body = params.getOrFail("body")
     }
 
-    fun getId() = newEntry.id
+    fun getId() = article?.id
 }
