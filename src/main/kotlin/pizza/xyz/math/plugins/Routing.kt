@@ -9,8 +9,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.util.*
 import org.koin.ktor.ext.inject
-import pizza.xyz.math.models.Article
-import pizza.xyz.math.models.articles
+import pizza.xyz.math.dao.dao
 import pizza.xyz.math.services.ArticleCreateService
 import pizza.xyz.math.services.ArticleDeleteService
 import pizza.xyz.math.services.ArticleEditService
@@ -30,7 +29,7 @@ fun Application.configureRouting() {
             get {
                 call.respond(FreeMarkerContent(
                     template = "index.ftl",
-                    model = mapOf("articles" to articles)
+                    model = mapOf("articles" to dao.getAllArticles())
                 ))
             }
             get("new") {
@@ -47,14 +46,14 @@ fun Application.configureRouting() {
                 val id = call.parameters.getOrFail<Int>("id").toInt()
                 call.respond(FreeMarkerContent(
                     template = "article.ftl",
-                    model = mapOf("article" to articles.find { it.id == id })
+                    model = mapOf("article" to dao.getArticle(id))
                 ))
             }
             get("{id}/edit") {
                 val id = call.parameters.getOrFail("id").toInt()
                 call.respond(FreeMarkerContent(
                     template = "edit.ftl",
-                    model = mapOf("article" to articles.find { it.id == id })
+                    model = mapOf("article" to dao.getArticle(id))
                 ))
             }
             post("{id}") {

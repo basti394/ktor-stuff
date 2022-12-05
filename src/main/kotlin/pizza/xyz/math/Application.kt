@@ -1,3 +1,4 @@
+
 package pizza.xyz.math
 
 import io.ktor.serialization.kotlinx.json.*
@@ -9,6 +10,7 @@ import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
+import pizza.xyz.math.dao.DatabaseFactory
 import pizza.xyz.math.plugins.configureRouting
 import pizza.xyz.math.plugins.configureTemplating
 import pizza.xyz.math.services.ArticleCreateService
@@ -25,6 +27,7 @@ fun Application.module() {
         slf4jLogger()
         modules(helloAppModule)
     }
+    DatabaseFactory.init()
     configureTemplating()
     configureRouting()
 }
